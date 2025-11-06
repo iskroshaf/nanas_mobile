@@ -1,7 +1,7 @@
 // lib/pages/sign_in.dart
 
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/pages/home.dart';
+import 'package:nanas_mobile/pages/dashboard.dart';
 import 'package:nanas_mobile/pages/sign_up.dart';
 import 'package:nanas_mobile/services/auth.dart';
 import 'package:nanas_mobile/styles/colors.dart';
@@ -57,7 +57,7 @@ class _SignInState extends State<SignIn> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const Dashboard()),
       );
     } catch (e) {
       if (!mounted) return;
