@@ -35,3 +35,12 @@ Future<void> signUp(String email, String password, String username) async {
     developer.log('API Error: $e');
   }
 }
+
+Future<void> signIn(String email, String password) async {
+  if (!await isOnline()) {
+    throw "No internet connection";
+  }
+  try {} catch (e) {
+    developer.log('Error: ${e.toString()}');
+  }
+}

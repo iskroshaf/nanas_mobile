@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-const Color kBodyLightColor = Color(0xFFecfdf5);
+const Color kBodyLightColor = Color(0xFFFFFFFF);
 const Color kBodyDarkColor = Color(0xFF0D1B2A);
 const Color kDialogDarkColor = Color(0xFF0D1B2A);
 const Color kDialogLightColor = Color(0XFFFFFFFF);
@@ -11,7 +11,7 @@ const Color kTextColorHigh = Color(0xFF334155);
 const Color kTextColorMedium = Color(0xFF64748b);
 const Color kTextColorLow = Color(0xFFcbd5e1);
 
-const Color kPrimaryColor = Color(0xFF059669);
+const Color kPrimaryColor = Color(0xFFf97316);
 const Color kSecondaryColor = Color(0xff083344);
 
 const Color kErrorColor = Color(0xFFB00020);
