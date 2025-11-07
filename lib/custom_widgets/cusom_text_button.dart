@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'package:nanas_mobile/widgets/custom_circular_progress_indicator.dart';
+import 'package:nanas_mobile/custom_widgets/custom_circular_progress_indicator.dart';
 
 class CustomTextButton extends StatelessWidget {
   final String text;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/widgets/custom_snack_bar.dart';
+import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
 
 bool isEmpty(String value) {
   return value.isEmpty;

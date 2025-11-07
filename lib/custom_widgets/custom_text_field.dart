@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'package:nanas_mobile/widgets/custom_icon_button.dart';
+import 'package:nanas_mobile/custom_widgets/custom_icon_button.dart';
 
 class CustomTextField extends StatefulWidget {
   final String? hintText;

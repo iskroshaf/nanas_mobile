@@ -6,9 +6,9 @@ import 'package:nanas_mobile/services/auth.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'package:nanas_mobile/utils/validators.dart';
-import 'package:nanas_mobile/widgets/custom_elevated_button.dart';
-import 'package:nanas_mobile/widgets/custom_snack_bar.dart';
-import 'package:nanas_mobile/widgets/custom_text_field.dart';
+import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
+import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
+import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

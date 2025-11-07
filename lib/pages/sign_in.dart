@@ -1,15 +1,15 @@
 // lib/pages/sign_in.dart
 
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/pages/dashboard.dart';
+import 'package:nanas_mobile/pages/ent_dashboard.dart';
 import 'package:nanas_mobile/pages/sign_up.dart';
 import 'package:nanas_mobile/services/auth.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'package:nanas_mobile/utils/validators.dart';
-import 'package:nanas_mobile/widgets/custom_elevated_button.dart';
-import 'package:nanas_mobile/widgets/custom_snack_bar.dart';
-import 'package:nanas_mobile/widgets/custom_text_field.dart';
+import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
+import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
+import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -57,7 +57,7 @@ class _SignInState extends State<SignIn> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Dashboard()),
+        MaterialPageRoute(builder: (context) => const EntLanding()),
       );
     } catch (e) {
       if (!mounted) return;
