@@ -1,0 +1,99 @@
+// lib/screens/home.dart
+
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nanas_mobile/screens/home.dart';
+import 'package:nanas_mobile/screens/profile.dart';
+import 'package:nanas_mobile/styles/colors.dart';
+import 'package:nanas_mobile/styles/sizes.dart';
+
+class EntLanding extends StatefulWidget {
+  final int initialIndex;
+  const EntLanding({super.key, this.initialIndex = 1});
+
+  @override
+  State<EntLanding> createState() => _EntLandingState();
+}
+
+class _EntLandingState extends State<EntLanding> {
+  late int _currentIndex;
+
+  void _onTap(int index) {
+    if (mounted) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? kBodyDarkColor : kBodyLightColor;
+    final selectedColor = isDark ? kPrimaryColor : kPrimaryColor;
+    final unselectedColor = isDark ? kWhiteColor : kTextColorMedium;
+    final borderColor = isDark ? kLineDarkColor : kLineLightColor;
+
+    final textTheme = Theme.of(context).textTheme;
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [Container(color: Colors.red), Home(), Profile()],
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: borderColor, width: 1)),
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(0.0),
+              topRight: Radius.circular(0.0),
+            ),
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: _currentIndex,
+              onTap: _onTap,
+              backgroundColor: backgroundColor,
+              selectedLabelStyle: textTheme.titleSmall,
+              unselectedLabelStyle: textTheme.titleSmall,
+              selectedItemColor: selectedColor,
+              unselectedItemColor: unselectedColor,
+              items: [
+                BottomNavigationBarItem(
+                  icon: FaIcon(
+                    FontAwesomeIcons.handRock,
+                    size: kIconSizeMedium,
+                  ),
+                  label: 'Entah',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(
+                    FontAwesomeIcons.chartBar,
+                    size: kIconSizeMedium,
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.user, size: kIconSizeMedium),
+                  label: 'Profile',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

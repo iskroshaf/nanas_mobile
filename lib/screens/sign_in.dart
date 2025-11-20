@@ -1,7 +1,8 @@
-// lib/pages/sign_up.dart
+// lib/screens/sign_in.dart
 
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/pages/sign_in.dart';
+import 'package:nanas_mobile/screens/ent_dashboard.dart';
+import 'package:nanas_mobile/screens/sign_up.dart';
 import 'package:nanas_mobile/services/auth.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
@@ -10,62 +11,53 @@ import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _SignUpState extends State<SignUp> {
-  final TextEditingController _usernameController = TextEditingController();
+class _SignInState extends State<SignIn> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
 
-  bool _isSignUp = false;
+  bool _isSignIn = false;
 
-  Future<void> _signUp() async {
+  Future<void> _signIn() async {
     setState(() {
-      _isSignUp = true;
+      _isSignIn = true;
     });
 
-    final isValid = await validateSignUpFields(
+    final isValid = await validateSignInFields(
       context,
-      _usernameController,
       _emailController,
       _passwordController,
-      _confirmPasswordController,
     );
 
     if (!mounted) return;
 
     if (!isValid) {
       setState(() {
-        _isSignUp = false;
+        _isSignIn = false;
       });
       return;
     }
 
     try {
-      await signUp(
-        _emailController.text.trim(),
-        _passwordController.text,
-        _usernameController.text.trim(),
-      );
+      await signIn(_emailController.text.trim(), _passwordController.text);
 
       if (!mounted) return;
 
       CustomSnackBar.show(
         context: context,
-        message: 'Sign Up successfully',
+        message: 'Sign In successfully',
         type: SnackBarType.success,
       );
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const SignIn()),
+        MaterialPageRoute(builder: (context) => const EntLanding()),
       );
     } catch (e) {
       if (!mounted) return;
@@ -77,7 +69,7 @@ class _SignUpState extends State<SignUp> {
     } finally {
       if (mounted) {
         setState(() {
-          _isSignUp = false;
+          _isSignIn = false;
         });
       }
     }
@@ -85,10 +77,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -103,28 +93,15 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             children: [
               CustomTextField(
-                isDisable: _isSignUp,
-                controller: _usernameController,
-                hintText: 'Username',
-              ),
-              const SizedBox(height: 8),
-              CustomTextField(
-                isDisable: _isSignUp,
+                isDisable: _isSignIn,
                 controller: _emailController,
                 hintText: 'Email Address',
               ),
               const SizedBox(height: 8),
               CustomTextField(
-                isDisable: _isSignUp,
+                isDisable: _isSignIn,
                 controller: _passwordController,
                 hintText: 'Password',
-                isObscureText: true,
-              ),
-              const SizedBox(height: 8),
-              CustomTextField(
-                isDisable: _isSignUp,
-                controller: _confirmPasswordController,
-                hintText: 'Confirm Password',
                 isObscureText: true,
               ),
               const SizedBox(height: 16),
@@ -132,9 +109,9 @@ class _SignUpState extends State<SignUp> {
                 height: 35,
                 width: double.infinity,
                 child: CustomElevatedButton(
-                  text: 'Sign Up',
-                  onPressed: _signUp,
-                  isLoading: _isSignUp,
+                  text: 'Sign In',
+                  onPressed: _signIn,
+                  isLoading: _isSignIn,
                 ),
               ),
               SizedBox(height: 16),
@@ -142,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Already have an account?',
+                    'Don\'t have an account?',
                     style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.normal,
                     ),
@@ -150,20 +127,20 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(width: 4),
                   GestureDetector(
                     onTap:
-                        _isSignUp
+                        _isSignIn
                             ? null
                             : () {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignIn(),
+                                  builder: (context) => SignUp(),
                                 ),
                               );
                             },
                     child: Opacity(
-                      opacity: _isSignUp ? 0.5 : 1.0,
+                      opacity: _isSignIn ? 0.5 : 1.0,
                       child: Text(
-                        'Sign In',
+                        'Sign Up',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: kPrimaryColor,

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:nanas_mobile/pages/landing.dart';
+import 'package:nanas_mobile/screens/landing.dart';
 import 'package:nanas_mobile/styles/app_themes.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 

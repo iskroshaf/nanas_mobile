@@ -1,7 +1,7 @@
-// lib/pages/landing.dart
+// lib/screens/landing.dart
 
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/pages/sign_in.dart';
+import 'package:nanas_mobile/screens/sign_in.dart';
 import 'package:nanas_mobile/custom_widgets/cusom_text_button.dart';
 
 class Landing extends StatefulWidget {

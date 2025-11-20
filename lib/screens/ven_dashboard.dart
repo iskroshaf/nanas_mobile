@@ -1,4 +1,4 @@
-// lib/pages/ven_dashboard.dart
+// lib/screens/ven_dashboard.dart
 
 import 'package:flutter/material.dart';
 
