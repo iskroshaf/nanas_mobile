@@ -22,7 +22,7 @@ class CustomElevatedButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.padding = kPaddingMedium,
+    this.padding = kPaddingButton,
     this.borderRadius = kBorderRadiusFull,
     this.backgroundColor = kPrimaryColor,
     this.elevation = 0.0,

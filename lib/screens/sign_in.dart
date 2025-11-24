@@ -6,7 +6,6 @@ import 'package:nanas_mobile/screens/sign_up.dart';
 import 'package:nanas_mobile/services/auth.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'package:nanas_mobile/utils/validators.dart';
 import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
@@ -29,20 +28,20 @@ class _SignInState extends State<SignIn> {
       _isSignIn = true;
     });
 
-    final isValid = await validateSignInFields(
-      context,
-      _emailController,
-      _passwordController,
-    );
+    // final isValid = await validateSignInFields(
+    //   context,
+    //   _emailController,
+    //   _passwordController,
+    // );
 
     if (!mounted) return;
 
-    if (!isValid) {
-      setState(() {
-        _isSignIn = false;
-      });
-      return;
-    }
+    // if (!isValid) {
+    //   setState(() {
+    //     _isSignIn = false;
+    //   });
+    //   return;
+    // }
 
     try {
       await signIn(_emailController.text.trim(), _passwordController.text);

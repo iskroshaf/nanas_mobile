@@ -36,7 +36,7 @@ class CustomSnackBar {
         borderRadius: kBorderRadiusMedium,
         color: getBackgroundColor(type),
         child: Padding(
-          padding: kPaddingCardLarge,
+          padding: kPaddingSnackBar,
           child: Text(
             message,
             style: const TextStyle(

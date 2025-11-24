@@ -15,17 +15,24 @@ const EdgeInsets kPaddingSmall = EdgeInsets.symmetric(
   vertical: 4,
 );
 
-const EdgeInsets kPaddingMedium = EdgeInsets.symmetric(
+const EdgeInsets kPaddingButton = EdgeInsets.symmetric(
   horizontal: 16,
   vertical: 8,
 );
-const EdgeInsets kPaddingCardLarge = EdgeInsets.symmetric(
+
+const EdgeInsets kPaddingSnackBar = EdgeInsets.symmetric(
   horizontal: 16,
   vertical: 16,
 );
+
 const EdgeInsets kPaddingInput = EdgeInsets.symmetric(
   horizontal: 16,
   vertical: 0,
+);
+
+const EdgeInsets kPaddingCard = EdgeInsets.symmetric(
+  horizontal: 8,
+  vertical: 8,
 );
 
 const kBorderRadiusSmall = BorderRadius.all(Radius.circular(4));

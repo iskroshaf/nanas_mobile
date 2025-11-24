@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nanas_mobile/screens/landing.dart';
 import 'package:nanas_mobile/styles/app_themes.dart';
 import 'package:nanas_mobile/styles/colors.dart';
@@ -10,7 +11,7 @@ import 'package:nanas_mobile/styles/colors.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
