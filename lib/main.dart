@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nanas_mobile/screens/landing.dart';
+import 'package:nanas_mobile/screens/ent_farm_register.dart';
 import 'package:nanas_mobile/styles/app_themes.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const Landing(),
+      home: const EntFarmRegister(),
     );
   }
 }

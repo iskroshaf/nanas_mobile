@@ -11,6 +11,7 @@ class CustomTextButton extends StatelessWidget {
   final EdgeInsets padding;
   final BorderRadius borderRadius;
   final Color? foregroundColor;
+  final Color? backgroundColor;
   final bool isDisable;
   final bool isLoading;
 
@@ -21,6 +22,7 @@ class CustomTextButton extends StatelessWidget {
     this.padding = kPaddingButton,
     this.borderRadius = kBorderRadiusFull,
     this.foregroundColor,
+    this.backgroundColor,
     this.isDisable = false,
     this.isLoading = false,
   });
@@ -29,8 +31,10 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final Color effectiveColor =
+    final Color effectiveForegroundColor =
         foregroundColor ?? (isDark ? kWhiteColor : kTextColorMedium);
+
+    final Color? effectiveBackgroundColor = backgroundColor;
 
     return IgnorePointer(
       ignoring: isDisable || isLoading,
@@ -40,7 +44,8 @@ class CustomTextButton extends StatelessWidget {
           onPressed: onPressed,
           style: TextButton.styleFrom(
             padding: padding,
-            foregroundColor: effectiveColor,
+            foregroundColor: effectiveForegroundColor,
+            backgroundColor: effectiveBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: borderRadius),
             textStyle: const TextStyle(
               fontFamily: 'myFont',
@@ -54,7 +59,7 @@ class CustomTextButton extends StatelessWidget {
                     height: 16,
                     width: 16,
                     child: CustomCircularProgressIndicator(
-                      color: effectiveColor,
+                      color: effectiveForegroundColor,
                       strokeWidth: 2.0,
                     ),
                   )

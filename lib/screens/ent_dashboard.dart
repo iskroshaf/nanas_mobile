@@ -7,15 +7,15 @@ import 'package:nanas_mobile/screens/profile.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 
-class EntLanding extends StatefulWidget {
+class EntDashboard extends StatefulWidget {
   final int initialIndex;
-  const EntLanding({super.key, this.initialIndex = 1});
+  const EntDashboard({super.key, this.initialIndex = 1});
 
   @override
-  State<EntLanding> createState() => _EntLandingState();
+  State<EntDashboard> createState() => _EntDashboardState();
 }
 
-class _EntLandingState extends State<EntLanding> {
+class _EntDashboardState extends State<EntDashboard> {
   late int _currentIndex;
 
   void _onTap(int index) {

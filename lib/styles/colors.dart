@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-const Color kBodyLightColor = Color(0xFFFFFFFF);
+const Color kBodyLightColor = Color(0xfff9fafb);
 const Color kBodyDarkColor = Color(0xFF0D1B2A);
 const Color kDialogDarkColor = Color(0xFF0D1B2A);
 const Color kDialogLightColor = Color(0XFFFFFFFF);

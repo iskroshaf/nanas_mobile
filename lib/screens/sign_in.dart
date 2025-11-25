@@ -56,7 +56,7 @@ class _SignInState extends State<SignIn> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const EntLanding()),
+        MaterialPageRoute(builder: (context) => const EntDashboard()),
       );
     } catch (e) {
       if (!mounted) return;

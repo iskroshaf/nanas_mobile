@@ -75,9 +75,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             focusNode: widget.focusNode,
             obscureText: _isObscureText,
             keyboardType:
-                widget.isNumber
-                    ? TextInputType.number
-                    : TextInputType.text,
+                widget.isNumber ? TextInputType.number : TextInputType.text,
             maxLines: widget.maxLines,
             minLines: widget.minLines,
             onChanged: widget.onChanged,
@@ -109,13 +107,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   color:
                       isDark
                           ? kWhiteColor.withOpacity(0.25)
-                          : Color(0xFFcbd5e1).withOpacity(0.25),
-                  width: 1.5,
+                          : Color(0xFFf3f4f6),
+                  width: 1,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide(color: kPrimaryColor, width: 1.5),
+                borderSide: BorderSide(color: kPrimaryColor, width: 1),
               ),
               prefixIcon:
                   widget.prefixIcon != null
