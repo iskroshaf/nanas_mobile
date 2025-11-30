@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nanas_mobile/screens/home.dart';
-import 'package:nanas_mobile/screens/profile.dart';
+import 'package:nanas_mobile/screens/settings.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 
@@ -44,7 +44,7 @@ class _EntDashboardState extends State<EntDashboard> {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [Container(color: Colors.red), Home(), Profile()],
+        children: [Container(color: Colors.red), Home(), Settings()],
       ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
@@ -73,21 +73,18 @@ class _EntDashboardState extends State<EntDashboard> {
               items: [
                 BottomNavigationBarItem(
                   icon: FaIcon(
-                    FontAwesomeIcons.handRock,
+                    FontAwesomeIcons.bullhorn,
                     size: kIconSizeMedium,
                   ),
-                  label: 'Entah',
+                  label: 'Annoucement',
                 ),
                 BottomNavigationBarItem(
-                  icon: FaIcon(
-                    FontAwesomeIcons.chartBar,
-                    size: kIconSizeMedium,
-                  ),
+                  icon: FaIcon(FontAwesomeIcons.tractor, size: kIconSizeMedium),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.user, size: kIconSizeMedium),
-                  label: 'Profile',
+                  icon: FaIcon(FontAwesomeIcons.gear, size: kIconSizeMedium),
+                  label: 'Settings',
                 ),
               ],
             ),

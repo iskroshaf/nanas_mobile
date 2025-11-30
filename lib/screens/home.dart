@@ -75,7 +75,7 @@ class _HomeState extends ConsumerState<Home> {
                       thickness: 6,
                       child: ListView.separated(
                         padding: const EdgeInsets.only(right: 12),
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        separatorBuilder: (_, __) => const SizedBox(height: 8),
                         itemCount: filteredShops.length,
                         itemBuilder: (context, index) {
                           final shop = filteredShops[index];

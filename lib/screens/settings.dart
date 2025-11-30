@@ -1,19 +1,20 @@
-// lib/screens/profile.dart
+// lib/screens/settings.dart
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nanas_mobile/screens/farm_settings.dart';
 import 'package:nanas_mobile/screens/profile_settings.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Settings extends StatefulWidget {
+  const Settings({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _ProfileState extends State<Profile> {
+class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -32,10 +33,9 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Profile',
+                    'Settings',
                     style: textTheme.titleLarge?.copyWith(color: kWhiteColor),
                   ),
-                  SizedBox(height: 6),
                   Center(
                     child: Column(
                       children: [
@@ -70,15 +70,15 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: kWhiteColor.withOpacity(0.25),
-                        borderRadius: kBorderRadiusMedium,
-                      ),
-                    ),
-                  ),
+                  // SizedBox(height: 8),
+                  // Expanded(
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: kWhiteColor.withOpacity(0.25),
+                  //       borderRadius: kBorderRadiusMedium,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -90,14 +90,14 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'General',
-                      style: textTheme.titleMedium?.copyWith(
-                        color: kTextColorMedium,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    buildProfileOption(context, 'Profile Settings', () {
+                    // Text(
+                    //   'General',
+                    //   style: textTheme.titleMedium?.copyWith(
+                    //     color: kTextColorMedium,
+                    //   ),
+                    // ),
+                    // SizedBox(height: 8),
+                    buildSettingsOption(context, 'Profile', () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -105,10 +105,17 @@ class _ProfileState extends State<Profile> {
                         ),
                       );
                     }),
-                    SizedBox(height: 10),
-                    buildProfileOption(context, 'Notifications', () {}),
-                    SizedBox(height: 10),
-                    buildProfileOption(context, 'Privacy', () {}),
+                    SizedBox(height: 8),
+                    buildSettingsOption(context, 'Farm', () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FarmSettings(),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: 8),
+                    buildSettingsOption(context, 'Privacy', () {}),
                   ],
                 ),
               ),
@@ -120,7 +127,7 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-Widget buildProfileOption(
+Widget buildSettingsOption(
   BuildContext context,
   String title,
   VoidCallback onTap,
@@ -130,14 +137,14 @@ Widget buildProfileOption(
     onTap: onTap,
     child: Container(
       padding: kPaddingInput,
-      height: 50,
+      height: 45,
       decoration: BoxDecoration(
         color: Color(0xfff9fafb),
         borderRadius: kBorderRadiusMedium,
       ),
       child: Row(
         children: [
-          Text(title, style: textTheme.titleMedium),
+          Text(title, style: textTheme.bodyMedium),
           Spacer(),
           FaIcon(
             FontAwesomeIcons.chevronRight,

@@ -1,4 +1,4 @@
-// lib/screens/profile_settings.dart
+// lib/screens/farm_settings.dart
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,25 +8,31 @@ import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'dart:developer' as developer;
 
-class ProfileSettings extends StatefulWidget {
-  const ProfileSettings({super.key});
+class FarmSettings extends StatefulWidget {
+  const FarmSettings({super.key});
 
   @override
-  State<ProfileSettings> createState() => _ProfileSettingsState();
+  State<FarmSettings> createState() => _FarmSettingsState();
 }
 
-class _ProfileSettingsState extends State<ProfileSettings> {
-  final _fullNameCtrl = TextEditingController();
-  final _usernameCtrl = TextEditingController();
-  final _phoneNumberCtrl = TextEditingController();
-  final _icCtrl = TextEditingController();
+class _FarmSettingsState extends State<FarmSettings> {
+  final _farmNameCtrl = TextEditingController();
+  final _farmSizeCtrl = TextEditingController();
+  final _addressCtrl = TextEditingController();
+  final _postcodeCtrl = TextEditingController();
+  final _townCtrl = TextEditingController();
+  final _varietyCtrl = TextEditingController();
+  final _yearCtrl = TextEditingController();
 
   @override
   void dispose() {
-    _fullNameCtrl.dispose();
-    _usernameCtrl.dispose();
-    _phoneNumberCtrl.dispose();
-    _icCtrl.dispose();
+    _farmNameCtrl.dispose();
+    _farmSizeCtrl.dispose();
+    _addressCtrl.dispose();
+    _postcodeCtrl.dispose();
+    _townCtrl.dispose();
+    _varietyCtrl.dispose();
+    _yearCtrl.dispose();
     super.dispose();
   }
 
@@ -36,7 +42,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        text: 'Profile Settings',
+        text: 'Farm Settings',
         centerTitle: true,
         backgroundColor: kPrimaryColor,
         titleColor: kWhiteColor,
@@ -69,8 +75,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   height: 150,
                   decoration: BoxDecoration(
                     color: kWhiteColor,
+                    borderRadius: kBorderRadiusSmall,
                     border: Border.all(color: const Color(0xFFf3f4f6)),
-                    shape: BoxShape.circle,
                   ),
                   child: Center(
                     child: Column(
@@ -89,44 +95,68 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 ),
               ),
               const SizedBox(height: 24),
-              buildProfileSettingField(
+              buildFarmSettingField(
                 context,
-                'Full Name',
+                'Farm Name',
                 false,
                 false,
-                _fullNameCtrl,
+                _farmNameCtrl,
               ),
-              SizedBox(height: 12),
-              buildProfileSettingField(
+              const SizedBox(height: 12),
+              buildFarmSettingField(
                 context,
-                'Username',
-                false,
-                false,
-                _usernameCtrl,
-              ),
-              SizedBox(height: 12),
-              buildProfileSettingField(
-                context,
-                'Email',
-                false,
-                true,
-                TextEditingController(),
-              ),
-              SizedBox(height: 12),
-              buildProfileSettingField(
-                context,
-                'Phone Number',
+                'Farm Size (acres)',
                 true,
                 false,
-                _phoneNumberCtrl,
+                _farmSizeCtrl,
               ),
-              SizedBox(height: 12),
-              buildProfileSettingField(
+              const SizedBox(height: 12),
+              buildFarmSettingField(
                 context,
-                'IC / Passport Number',
+                'Address',
+                false,
+                false,
+                _addressCtrl,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: buildFarmSettingField(
+                      context,
+                      'Postcode',
+                      true,
+                      false,
+                      _postcodeCtrl,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: buildFarmSettingField(
+                      context,
+                      'Town/City',
+                      false,
+                      false,
+                      _townCtrl,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              buildFarmSettingField(
+                context,
+                'Pineapple Variety(s)',
+                false,
+                false,
+                _varietyCtrl,
+              ),
+              const SizedBox(height: 12),
+              buildFarmSettingField(
+                context,
+                'Year In Business',
                 true,
                 false,
-                _icCtrl,
+                _yearCtrl,
               ),
               const SizedBox(height: 24),
             ],
@@ -137,7 +167,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 }
 
-Widget buildProfileSettingField(
+Widget buildFarmSettingField(
   BuildContext context,
   String label,
   bool isNumber,

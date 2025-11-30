@@ -12,7 +12,7 @@ const Color kTextColorMedium = Color(0xFF64748b);
 const Color kTextColorLow = Color(0xFFcbd5e1);
 
 const Color kPrimaryColor = Color(0xFFf97316);
-const Color kSecondaryColor = Color(0xff083344);
+const Color kSecondaryColor = Color(0xffbbf7d0);
 
 const Color kErrorColor = Color(0xFFB00020);
 const Color kWarningColor = Color(0xFFFFA500);

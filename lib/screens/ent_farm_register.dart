@@ -31,7 +31,6 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
 
   final _ownerNameCtrl = TextEditingController();
   final _ownerPhoneCtrl = TextEditingController();
-  final _ownerEmailCtrl = TextEditingController();
   final _ownerIcCtrl = TextEditingController();
 
   @override
@@ -53,7 +52,6 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
 
     _ownerNameCtrl.dispose();
     _ownerPhoneCtrl.dispose();
-    _ownerEmailCtrl.dispose();
     _ownerIcCtrl.dispose();
     super.dispose();
   }
@@ -96,11 +94,10 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                 },
                 children: [
                   SingleChildScrollView(
-                    padding: kPaddingBody,
+                    padding: kPaddingBody.copyWith(top: 16, bottom: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 16),
                         Text(
                           'Owner Registration',
                           style: textTheme.titleLarge?.copyWith(
@@ -137,7 +134,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                   const SizedBox(height: 8),
                                   Text(
                                     'Tap to upload image',
-                                    style: textTheme.bodyMedium,
+                                    style: textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -145,37 +142,36 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Full Name',
                           false,
                           _ownerNameCtrl,
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Phone Number',
                           true,
                           _ownerPhoneCtrl,
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'IC / Passport Number',
                           false,
                           _ownerIcCtrl,
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
 
                   SingleChildScrollView(
-                    padding: kPaddingBody,
+                    padding: kPaddingBody.copyWith(top: 16, bottom: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 16),
                         Text(
                           'Farm Registration',
                           style: textTheme.titleLarge?.copyWith(
@@ -212,7 +208,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                   const SizedBox(height: 8),
                                   Text(
                                     'Tap to upload image',
-                                    style: textTheme.bodyMedium,
+                                    style: textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -220,27 +216,31 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           ),
                         ),
                         const SizedBox(height: 24),
-
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Farm Name',
                           false,
                           _farmNameCtrl,
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Farm Size (acres)',
                           true,
                           _farmSizeCtrl,
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(context, 'Address', false, _addressCtrl),
+                        buildOwnerFarmFields(
+                          context,
+                          'Address',
+                          false,
+                          _addressCtrl,
+                        ),
                         const SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
-                              child: buildFarmField(
+                              child: buildOwnerFarmFields(
                                 context,
                                 'Postcode',
                                 true,
@@ -249,7 +249,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                             ),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: buildFarmField(
+                              child: buildOwnerFarmFields(
                                 context,
                                 'Town/City',
                                 false,
@@ -259,20 +259,20 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Pineapple Variety(s)',
                           false,
                           _varietyCtrl,
                         ),
                         const SizedBox(height: 12),
-                        buildFarmField(
+                        buildOwnerFarmFields(
                           context,
                           'Year In Business',
                           true,
                           _yearCtrl,
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
@@ -327,25 +327,25 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
       ),
     );
   }
+}
 
-  Widget buildFarmField(
-    BuildContext context,
-    String label,
-    bool isNumber,
-    TextEditingController controller,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: kTextColorHigh),
-        ),
-        const SizedBox(height: 4),
-        CustomTextField(controller: controller, isNumber: isNumber),
-      ],
-    );
-  }
+Widget buildOwnerFarmFields(
+  BuildContext context,
+  String label,
+  bool isNumber,
+  TextEditingController controller,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: kTextColorHigh),
+      ),
+      const SizedBox(height: 4),
+      CustomTextField(controller: controller, isNumber: isNumber),
+    ],
+  );
 }
