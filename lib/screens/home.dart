@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nanas_mobile/custom_widgets/custom_circular_progress_indicator.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
-import 'package:nanas_mobile/providers/ven_shops_provider.dart';
+import 'package:nanas_mobile/providers/ven_shop.dart';
 import 'package:nanas_mobile/screens/ven_shop.dart' as screen;
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
@@ -30,7 +30,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final shopsAsyncValue = ref.watch(venShopsProvider);
+    final shopsAsyncValue = ref.watch(venShopProvider);
     final searchQuery = ref.watch(shopSearchProvider);
 
     return Scaffold(

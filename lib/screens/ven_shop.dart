@@ -1,11 +1,11 @@
 // lib/screens/ven_shop.dart
 
 import 'package:flutter/material.dart';
-import 'package:nanas_mobile/models/ven_shops.dart' as model;
+import 'package:nanas_mobile/models/ven_shop.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 
 class VenShop extends StatefulWidget {
-  final model.VenShop shop;
+  final VenShopModel shop;
 
   const VenShop({super.key, required this.shop});
 

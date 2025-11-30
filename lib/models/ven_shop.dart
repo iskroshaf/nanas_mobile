@@ -1,13 +1,13 @@
 // lib/models/ven_shop.dart
 
-class VenShop {
+class VenShopModel {
   final int id;
   final String name;
   final String desc;
   final double price;
   final String location;
 
-  VenShop({
+  VenShopModel({
     required this.id,
     required this.name,
     required this.desc,
@@ -15,8 +15,8 @@ class VenShop {
     required this.location,
   });
 
-  factory VenShop.fromJson(Map<String, dynamic> json) {
-    return VenShop(
+  factory VenShopModel.fromJson(Map<String, dynamic> json) {
+    return VenShopModel(
       id: json['id'],
       name: json['name'],
       desc: json['desc'],

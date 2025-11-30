@@ -1,7 +1,7 @@
 {
     "files.exclude": {
         "**/.dart_tool": true,
-        "**/android": true,
+        // "**/android": true,
         "**/build": true,
         "**/test": true,
 
