@@ -10,7 +10,7 @@ import 'package:nanas_mobile/helpers/image_picker.dart';
 import 'package:nanas_mobile/services/ent.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'dart:developer' as developer;
+// import 'dart:developer' as developer;
 import 'dart:io';
 
 class ProfileSettings extends StatefulWidget {

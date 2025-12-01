@@ -95,11 +95,11 @@ class ImagePickerHelper {
             width: 35,
             height: 35,
             decoration: BoxDecoration(
-              color: kIconColor.withOpacity(0.1),
+              color: kPrimaryColor.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: FaIcon(icon, color: kIconColor, size: kIconSizeSmall),
+              child: FaIcon(icon, color: kPrimaryColor, size: kIconSizeSmall),
             ),
           ),
           const SizedBox(width: 16),
@@ -107,7 +107,12 @@ class ImagePickerHelper {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: theme.textTheme.titleMedium),
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: kPrimaryColor,
+                  ),
+                ),
                 Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),

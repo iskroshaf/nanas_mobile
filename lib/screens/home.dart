@@ -19,10 +19,12 @@ class Home extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<Home> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -37,147 +39,158 @@ class _HomeState extends ConsumerState<Home> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: kPaddingBody,
-              child: CustomTextField(
-                controller: _searchController,
-                hintText: 'Search...',
-                onChanged: (value) {
-                  ref.read(shopSearchProvider.notifier).state = value;
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: shopsAsyncValue.when(
-                loading:
-                    () =>
-                        const Center(child: CustomCircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('$error')),
-                data: (shops) {
-                  final filteredShops =
-                      shops
-                          .where(
-                            (shop) => shop.name.toLowerCase().contains(
-                              searchQuery.toLowerCase(),
-                            ),
-                          )
-                          .toList();
+            // Padding(
+            //   padding: kPaddingBody,
+            //   child: CustomTextField(
+            //     controller: _searchController,
+            //     hintText: 'Search...',
+            //     onChanged: (value) {
+            //       ref.read(shopSearchProvider.notifier).state = value;
+            //     },
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+            // Expanded(
+            //   child: shopsAsyncValue.when(
+            //     loading:
+            //         () =>
+            //             const Center(child: CustomCircularProgressIndicator()),
+            //     error:
+            //         (error, stack) => Center(
+            //           child: Text('$error', style: textTheme.bodyMedium),
+            //         ),
+            //     data: (shops) {
+            //       final filteredShops =
+            //           shops
+            //               .where(
+            //                 (shop) => shop.name.toLowerCase().contains(
+            //                   searchQuery.toLowerCase(),
+            //                 ),
+            //               )
+            //               .toList();
 
-                  if (filteredShops.isEmpty) {
-                    return const Center(child: Text('No Vendor found.'));
-                  }
-                  return Padding(
-                    padding: kPaddingBody.copyWith(right: 4),
-                    child: Scrollbar(
-                      interactive: true,
-                      thumbVisibility: true,
-                      thickness: 6,
-                      child: ListView.separated(
-                        padding: const EdgeInsets.only(right: 12),
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
-                        itemCount: filteredShops.length,
-                        itemBuilder: (context, index) {
-                          final shop = filteredShops[index];
-                          return GestureDetector(
-                            onTap: () {
-                              developer.log(shop.name);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => screen.VenShop(shop: shop),
-                                ),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                if (index == 0) const SizedBox(height: 10),
-                                Container(
-                                  padding: kPaddingCard,
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    color: kWhiteColor,
-                                    borderRadius: kBorderRadiusSmall,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xFFe2e8f0),
-                                    ),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 130,
-                                        width: double.infinity,
-                                        decoration: const BoxDecoration(
-                                          color: kWhiteColor,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: kBorderRadiusSmall,
-                                          child: Image.asset(
-                                            'assets/images/wp${(index % 4) + 1}.jpg',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
+            //       if (filteredShops.isEmpty) {
+            //         return Center(
+            //           child: Text(
+            //             'No Vendor found.',
+            //             style: textTheme.bodyMedium,
+            //           ),
+            //         );
+            //       }
+            //       return Padding(
+            //         padding: kPaddingBody.copyWith(right: 4),
+            //         child: Scrollbar(
+            //           controller: _scrollController,
+            //           interactive: true,
+            //           thumbVisibility: true,
+            //           thickness: 6,
+            //           child: ListView.separated(
+            //             controller: _scrollController,
+            //             primary: false,
+            //             padding: const EdgeInsets.only(right: 12),
+            //             separatorBuilder: (_, __) => const SizedBox(height: 8),
+            //             itemCount: filteredShops.length,
+            //             itemBuilder: (context, index) {
+            //               final shop = filteredShops[index];
+            //               return GestureDetector(
+            //                 onTap: () {
+            //                   developer.log(shop.name);
+            //                   Navigator.push(
+            //                     context,
+            //                     MaterialPageRoute(
+            //                       builder: (_) => screen.VenShop(shop: shop),
+            //                     ),
+            //                   );
+            //                 },
+            //                 child: Column(
+            //                   children: [
+            //                     if (index == 0) const SizedBox(height: 10),
+            //                     Container(
+            //                       padding: kPaddingCard,
+            //                       height: 200,
+            //                       decoration: BoxDecoration(
+            //                         color: kWhiteColor,
+            //                         borderRadius: kBorderRadiusSmall,
+            //                         border: Border.all(
+            //                           width: 1,
+            //                           color: const Color(0xFFe2e8f0),
+            //                         ),
+            //                       ),
+            //                       child: Column(
+            //                         children: [
+            //                           Container(
+            //                             height: 130,
+            //                             width: double.infinity,
+            //                             decoration: const BoxDecoration(
+            //                               color: kWhiteColor,
+            //                             ),
+            //                             child: ClipRRect(
+            //                               borderRadius: kBorderRadiusSmall,
+            //                               child: Image.asset(
+            //                                 'assets/images/wp${(index % 4) + 1}.jpg',
+            //                                 fit: BoxFit.cover,
+            //                               ),
+            //                             ),
+            //                           ),
 
-                                      SizedBox(height: 4),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    shop.name,
-                                                    style:
-                                                        textTheme.titleMedium,
-                                                  ),
-                                                  Text(
-                                                    'RM${shop.price}/kg',
-                                                    style: textTheme.titleSmall
-                                                        ?.copyWith(
-                                                          color: kPrimaryColor,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Text(
-                                                shop.location,
-                                                style: textTheme.bodySmall,
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            shop.desc,
-                                            style: textTheme.bodySmall,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                if (index == filteredShops.length - 1)
-                                  const SizedBox(height: 10),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            //                           const SizedBox(height: 4),
+            //                           Column(
+            //                             crossAxisAlignment:
+            //                                 CrossAxisAlignment.start,
+            //                             children: [
+            //                               Row(
+            //                                 crossAxisAlignment:
+            //                                     CrossAxisAlignment.start,
+            //                                 mainAxisAlignment:
+            //                                     MainAxisAlignment.spaceBetween,
+            //                                 children: [
+            //                                   Column(
+            //                                     crossAxisAlignment:
+            //                                         CrossAxisAlignment.start,
+            //                                     children: [
+            //                                       Text(
+            //                                         shop.name,
+            //                                         style:
+            //                                             textTheme.titleMedium,
+            //                                       ),
+            //                                       Text(
+            //                                         'RM${shop.price}/kg',
+            //                                         style: textTheme.titleSmall
+            //                                             ?.copyWith(
+            //                                               color: kPrimaryColor,
+            //                                             ),
+            //                                       ),
+            //                                     ],
+            //                                   ),
+            //                                   Text(
+            //                                     shop.location,
+            //                                     style: textTheme.bodySmall,
+            //                                   ),
+            //                                 ],
+            //                               ),
+            //                               Text(
+            //                                 shop.desc,
+            //                                 style: textTheme.bodySmall,
+            //                                 maxLines: 2,
+            //                                 overflow: TextOverflow.ellipsis,
+            //                               ),
+            //                             ],
+            //                           ),
+            //                         ],
+            //                       ),
+            //                     ),
+            //                     if (index == filteredShops.length - 1)
+            //                       const SizedBox(height: 10),
+            //                   ],
+            //                 ),
+            //               );
+            //             },
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

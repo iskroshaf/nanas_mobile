@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nanas_mobile/screens/ent_farm_register.dart';
+import 'package:nanas_mobile/screens/sign_in.dart';
 import 'package:nanas_mobile/styles/app_themes.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 

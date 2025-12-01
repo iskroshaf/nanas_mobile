@@ -40,8 +40,8 @@ class _SettingsState extends State<Settings> {
                     child: Column(
                       children: [
                         Container(
-                          width: 64,
-                          height: 64,
+                          width: 100,
+                          height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: const DecorationImage(
@@ -50,7 +50,7 @@ class _SettingsState extends State<Settings> {
                               ),
                               fit: BoxFit.cover,
                             ),
-                            border: Border.all(color: kWhiteColor, width: 1),
+                            border: Border.all(color: kWhiteColor, width: 0.5),
                           ),
                         ),
 

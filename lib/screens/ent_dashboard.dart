@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nanas_mobile/screens/announcements.dart';
 import 'package:nanas_mobile/screens/home.dart';
 import 'package:nanas_mobile/screens/settings.dart';
 import 'package:nanas_mobile/styles/colors.dart';
@@ -37,14 +38,14 @@ class _EntDashboardState extends State<EntDashboard> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDark ? kBodyDarkColor : kBodyLightColor;
     final selectedColor = isDark ? kPrimaryColor : kPrimaryColor;
-    final unselectedColor = isDark ? kWhiteColor : kTextColorMedium;
+    final unselectedColor = isDark ? kWhiteColor : Color(0xFFd1d5db);
     final borderColor = isDark ? kLineDarkColor : kLineLightColor;
 
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [Container(color: Colors.red), Home(), Settings()],
+        children: [Announcements(), Home(), Settings()],
       ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(

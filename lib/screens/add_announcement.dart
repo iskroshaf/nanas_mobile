@@ -1,4 +1,4 @@
-// lib/screens/farm_settings.dart
+// lib/screens/add_announcement.dart
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,32 +10,22 @@ import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 // import 'dart:developer' as developer;
 
-class FarmSettings extends StatefulWidget {
-  const FarmSettings({super.key});
+class AddAnnouncement extends StatefulWidget {
+  const AddAnnouncement({super.key});
 
   @override
-  State<FarmSettings> createState() => _FarmSettingsState();
+  State<AddAnnouncement> createState() => _AddAnnouncementState();
 }
 
-class _FarmSettingsState extends State<FarmSettings> {
-  final _farmNameCtrl = TextEditingController();
-  final _farmSizeCtrl = TextEditingController();
-  final _addressCtrl = TextEditingController();
-  final _postcodeCtrl = TextEditingController();
-  final _townCtrl = TextEditingController();
-  final _varietyCtrl = TextEditingController();
-  final _yearCtrl = TextEditingController();
-  File? _farmImage;
+class _AddAnnouncementState extends State<AddAnnouncement> {
+  final _titleCtrl = TextEditingController();
+  final _descriptionCtrl = TextEditingController();
+  File? _announcementImage;
 
   @override
   void dispose() {
-    _farmNameCtrl.dispose();
-    _farmSizeCtrl.dispose();
-    _addressCtrl.dispose();
-    _postcodeCtrl.dispose();
-    _townCtrl.dispose();
-    _varietyCtrl.dispose();
-    _yearCtrl.dispose();
+    _titleCtrl.dispose();
+    _descriptionCtrl.dispose();
     super.dispose();
   }
 
@@ -45,20 +35,11 @@ class _FarmSettingsState extends State<FarmSettings> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        text: 'Farm Settings',
+        text: 'Add Announcement',
         centerTitle: true,
         backgroundColor: kPrimaryColor,
         titleColor: kWhiteColor,
         leadingIconColor: kWhiteColor,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Text(
-              'Save',
-              style: textTheme.bodyMedium?.copyWith(color: kSecondaryColor),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -67,7 +48,7 @@ class _FarmSettingsState extends State<FarmSettings> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tell us a little about yourself as the farm owner.',
+                'Share important updates with your team and stakeholders.',
                 style: textTheme.bodySmall,
               ),
               const SizedBox(height: 24),
@@ -75,7 +56,7 @@ class _FarmSettingsState extends State<FarmSettings> {
                 onTap: () async {
                   final picked = await ImagePickerHelper.pickImage(context);
                   if (picked != null) {
-                    setState(() => _farmImage = picked);
+                    setState(() => _announcementImage = picked);
                   }
                 },
                 child: Container(
@@ -87,8 +68,8 @@ class _FarmSettingsState extends State<FarmSettings> {
                     border: Border.all(color: const Color(0xFFf3f4f6)),
                   ),
                   child:
-                      _farmImage != null
-                          ? Image.file(_farmImage!, fit: BoxFit.cover)
+                      _announcementImage != null
+                          ? Image.file(_announcementImage!, fit: BoxFit.cover)
                           : Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -109,75 +90,22 @@ class _FarmSettingsState extends State<FarmSettings> {
                 ),
               ),
               const SizedBox(height: 24),
-              buildFarmSettingField(
+              buildAnnouncementField(
                 context,
-                'Farm Name',
+                'Title',
                 false,
                 false,
-                'Enter your farm name',
-                _farmNameCtrl,
+                'Enter announcement title',
+                _titleCtrl,
               ),
               const SizedBox(height: 12),
-              buildFarmSettingField(
+              buildAnnouncementField(
                 context,
-                'Farm Size (acres)',
-                true,
-                false,
-                'Enter farm size in acres',
-                _farmSizeCtrl,
-              ),
-              const SizedBox(height: 12),
-              buildFarmSettingField(
-                context,
-                'Address',
+                'Description',
                 false,
                 false,
-                'Enter your farm address',
-                _addressCtrl,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: buildFarmSettingField(
-                      context,
-                      'Postcode',
-                      true,
-                      false,
-                      'Enter postcode',
-                      _postcodeCtrl,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: buildFarmSettingField(
-                      context,
-                      'Town/City',
-                      false,
-                      false,
-                      'Enter town or city',
-                      _townCtrl,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              buildFarmSettingField(
-                context,
-                'Pineapple Variety(s)',
-                false,
-                false,
-                'e.g., MD2, Moris, Josapine',
-                _varietyCtrl,
-              ),
-              const SizedBox(height: 12),
-              buildFarmSettingField(
-                context,
-                'Year In Business',
-                true,
-                false,
-                'Enter year started',
-                _yearCtrl,
+                'Provide details about the announcement',
+                _descriptionCtrl,
               ),
               const SizedBox(height: 24),
             ],
@@ -188,7 +116,7 @@ class _FarmSettingsState extends State<FarmSettings> {
   }
 }
 
-Widget buildFarmSettingField(
+Widget buildAnnouncementField(
   BuildContext context,
   String label,
   bool isNumber,

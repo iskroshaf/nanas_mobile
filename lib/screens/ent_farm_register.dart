@@ -11,7 +11,7 @@ import 'package:nanas_mobile/helpers/image_picker.dart';
 import 'package:nanas_mobile/screens/ent_dashboard.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'dart:developer' as developer;
+// import 'dart:developer' as developer;
 
 class EntFarmRegister extends StatefulWidget {
   const EntFarmRegister({super.key});
@@ -161,6 +161,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Full Name',
                           false,
+                          'Enter your full name',
                           _ownerNameCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -168,6 +169,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Phone Number',
                           true,
+                          'Enter your phone number',
                           _ownerPhoneCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -175,6 +177,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'IC / Passport Number',
                           false,
+                          'Enter your IC or passport number',
                           _ownerIcCtrl,
                         ),
                         const SizedBox(height: 24),
@@ -219,10 +222,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                             ),
                             child:
                                 _farmImage != null
-                                    ? Image.file(
-                                      _ownerImage!,
-                                      fit: BoxFit.cover,
-                                    )
+                                    ? Image.file(_farmImage!, fit: BoxFit.cover)
                                     : Center(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -247,6 +247,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Farm Name',
                           false,
+                          'Enter your farm name',
                           _farmNameCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -254,6 +255,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Farm Size (acres)',
                           true,
+                          'Enter farm size in acres',
                           _farmSizeCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -261,6 +263,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Address',
                           false,
+                          'Enter your farm address',
                           _addressCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -271,6 +274,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                 context,
                                 'Postcode',
                                 true,
+                                'Enter postcode',
                                 _postcodeCtrl,
                               ),
                             ),
@@ -280,6 +284,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                 context,
                                 'Town/City',
                                 false,
+                                'Enter town or city',
                                 _townCtrl,
                               ),
                             ),
@@ -290,6 +295,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Pineapple Variety(s)',
                           false,
+                          'e.g., MD2, Moris, Josapine',
                           _varietyCtrl,
                         ),
                         const SizedBox(height: 12),
@@ -297,6 +303,7 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           context,
                           'Year In Business',
                           true,
+                          'Enter year started',
                           _yearCtrl,
                         ),
                         const SizedBox(height: 24),
@@ -360,6 +367,7 @@ Widget buildOwnerFarmFields(
   BuildContext context,
   String label,
   bool isNumber,
+  String hintText,
   TextEditingController controller,
 ) {
   return Column(
@@ -372,7 +380,11 @@ Widget buildOwnerFarmFields(
         ).textTheme.bodyMedium?.copyWith(color: kTextColorHigh),
       ),
       const SizedBox(height: 4),
-      CustomTextField(controller: controller, isNumber: isNumber),
+      CustomTextField(
+        controller: controller,
+        isNumber: isNumber,
+        hintText: hintText,
+      ),
     ],
   );
 }

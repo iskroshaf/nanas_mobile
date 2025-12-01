@@ -10,7 +10,7 @@ class AppTheme {
     scaffoldBackgroundColor: kBodyLightColor,
     fontFamily: 'myFont',
     scrollbarTheme: ScrollbarThemeData(
-      thumbColor: MaterialStateProperty.all(Color(0xFF9E9E9E)),
+      thumbColor: MaterialStateProperty.all(Color(0xFFd1d5db)),
       radius: Radius.circular(16),
     ),
     textTheme: TextTheme(
