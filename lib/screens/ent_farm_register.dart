@@ -1,10 +1,13 @@
 // lib/screens/farm_register.dart
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nanas_mobile/custom_widgets/custom_outlined_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
+import 'package:nanas_mobile/helpers/image_picker.dart';
 import 'package:nanas_mobile/screens/ent_dashboard.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
@@ -28,10 +31,12 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
   final _townCtrl = TextEditingController();
   final _varietyCtrl = TextEditingController();
   final _yearCtrl = TextEditingController();
+  File? _farmImage;
 
   final _ownerNameCtrl = TextEditingController();
   final _ownerPhoneCtrl = TextEditingController();
   final _ownerIcCtrl = TextEditingController();
+  File? _ownerImage;
 
   @override
   void initState() {
@@ -109,34 +114,44 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                           style: textTheme.bodySmall,
                         ),
                         const SizedBox(height: 24),
-                        GestureDetector(
-                          onTap:
-                              () => developer.log('Upload Farm Image tapped'),
-                          child: Container(
-                            width: double.infinity,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: kWhiteColor,
-                              border: Border.all(
-                                color: const Color(0xFFf3f4f6),
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.image,
-                                    size: kIconSizeLarge,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Tap to upload image',
-                                    style: textTheme.bodySmall,
-                                  ),
-                                ],
+                        Center(
+                          child: GestureDetector(
+                            onTap: () async {
+                              final picked = await ImagePickerHelper.pickImage(
+                                context,
+                              );
+                              if (picked != null) {
+                                setState(() => _ownerImage = picked);
+                              }
+                            },
+                            child: ClipOval(
+                              child: Container(
+                                width: 150,
+                                height: 150,
+                                color: kWhiteColor,
+                                child:
+                                    _ownerImage != null
+                                        ? Image.file(
+                                          _ownerImage!,
+                                          fit: BoxFit.cover,
+                                        )
+                                        : Center(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              FaIcon(
+                                                FontAwesomeIcons.image,
+                                                size: kIconSizeLarge,
+                                                color: Colors.grey.shade400,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'Tap to upload image',
+                                                style: textTheme.bodySmall,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                               ),
                             ),
                           ),
@@ -184,8 +199,14 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                         ),
                         const SizedBox(height: 24),
                         GestureDetector(
-                          onTap:
-                              () => developer.log('Upload Farm Image tapped'),
+                          onTap: () async {
+                            final picked = await ImagePickerHelper.pickImage(
+                              context,
+                            );
+                            if (picked != null) {
+                              setState(() => _farmImage = picked);
+                            }
+                          },
                           child: Container(
                             width: double.infinity,
                             height: 150,
@@ -196,23 +217,29 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                 color: const Color(0xFFf3f4f6),
                               ),
                             ),
-                            child: Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.image,
-                                    size: kIconSizeLarge,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Tap to upload image',
-                                    style: textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            child:
+                                _farmImage != null
+                                    ? Image.file(
+                                      _ownerImage!,
+                                      fit: BoxFit.cover,
+                                    )
+                                    : Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          FaIcon(
+                                            FontAwesomeIcons.image,
+                                            size: kIconSizeLarge,
+                                            color: Colors.grey.shade400,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Tap to upload image',
+                                            style: textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                           ),
                         ),
                         const SizedBox(height: 24),

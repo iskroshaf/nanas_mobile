@@ -44,7 +44,10 @@ class _SignInState extends State<SignIn> {
     // }
 
     try {
-      await signIn(_emailController.text.trim(), _passwordController.text);
+      await AuthService.signIn(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
 
       if (!mounted) return;
 

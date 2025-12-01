@@ -49,7 +49,7 @@ class _SignUpState extends State<SignUp> {
     }
 
     try {
-      await signUp(
+      await AuthService.signUp(
         _emailController.text.trim(),
         _passwordController.text,
         _usernameController.text.trim(),

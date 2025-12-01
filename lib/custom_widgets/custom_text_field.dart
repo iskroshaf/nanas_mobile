@@ -87,15 +87,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
               labelStyle: textTheme.bodyMedium?.copyWith(
                 color:
                     isDark
-                        ? kWhiteColor.withOpacity(0.5)
-                        : kTextColorMedium.withOpacity(0.5),
+                        ? kWhiteColor.withOpacity(0.35)
+                        : kTextColorMedium.withOpacity(0.35),
               ),
               hintText: widget.hintText,
               hintStyle: textTheme.bodyMedium?.copyWith(
                 color:
                     isDark
-                        ? kWhiteColor.withOpacity(0.5)
-                        : kTextColorMedium.withOpacity(0.5),
+                        ? kWhiteColor.withOpacity(0.35)
+                        : kTextColorMedium.withOpacity(0.35),
               ),
               filled: true,
               fillColor: isDark ? kSecondaryColor : kWhiteColor,

@@ -1,12 +1,15 @@
 // lib/screens/farm_settings.dart
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nanas_mobile/custom_widgets/custom_app_bar.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
+import 'package:nanas_mobile/helpers/image_picker.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-import 'dart:developer' as developer;
+// import 'dart:developer' as developer;
 
 class FarmSettings extends StatefulWidget {
   const FarmSettings({super.key});
@@ -23,6 +26,7 @@ class _FarmSettingsState extends State<FarmSettings> {
   final _townCtrl = TextEditingController();
   final _varietyCtrl = TextEditingController();
   final _yearCtrl = TextEditingController();
+  File? _farmImage;
 
   @override
   void dispose() {
@@ -69,7 +73,12 @@ class _FarmSettingsState extends State<FarmSettings> {
               ),
               const SizedBox(height: 24),
               GestureDetector(
-                onTap: () => developer.log('Upload Farm Image tapped'),
+                onTap: () async {
+                  final picked = await ImagePickerHelper.pickImage(context);
+                  if (picked != null) {
+                    setState(() => _farmImage = picked);
+                  }
+                },
                 child: Container(
                   width: double.infinity,
                   height: 150,
@@ -78,20 +87,26 @@ class _FarmSettingsState extends State<FarmSettings> {
                     borderRadius: kBorderRadiusSmall,
                     border: Border.all(color: const Color(0xFFf3f4f6)),
                   ),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.image,
-                          size: kIconSizeLarge,
-                          color: Colors.grey.shade400,
-                        ),
-                        const SizedBox(height: 8),
-                        Text('Tap to upload image', style: textTheme.bodySmall),
-                      ],
-                    ),
-                  ),
+                  child:
+                      _farmImage != null
+                          ? Image.file(_farmImage!, fit: BoxFit.cover)
+                          : Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.image,
+                                  size: kIconSizeLarge,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tap to upload image',
+                                  style: textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
                 ),
               ),
               const SizedBox(height: 24),
