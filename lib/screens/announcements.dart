@@ -45,9 +45,22 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
               decoration: const BoxDecoration(color: kPrimaryColor),
               child: Row(
                 children: [
-                  Text(
-                    'Announcements',
-                    style: textTheme.titleLarge?.copyWith(color: kWhiteColor),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Announcements',
+                        style: textTheme.titleLarge?.copyWith(
+                          color: kWhiteColor,
+                        ),
+                      ),
+                      Text(
+                        'Latest updates from farms & vendors',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: kWhiteColor,
+                        ),
+                      ),
+                    ],
                   ),
                   Spacer(),
                   CustomIconButton(
@@ -115,18 +128,14 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
                                   decoration: BoxDecoration(
                                     color: kWhiteColor,
                                     borderRadius: kBorderRadiusSmall,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xFFe2e8f0),
-                                    ),
                                   ),
                                   child: Column(
                                     children: [
                                       Row(
                                         children: [
                                           Container(
-                                            width: 25,
-                                            height: 25,
+                                            width: 20,
+                                            height: 20,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               image: DecorationImage(
@@ -137,7 +146,7 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
                                           ),
                                           SizedBox(width: 4),
                                           Text(
-                                            '@${announcement.sender}',
+                                            announcement.sender,
                                             style: textTheme.bodyMedium,
                                           ),
                                           Spacer(),

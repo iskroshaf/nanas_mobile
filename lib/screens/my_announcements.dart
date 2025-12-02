@@ -13,7 +13,6 @@ import 'package:nanas_mobile/screens/add_announcement.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'package:nanas_mobile/utils/date.dart';
-import 'dart:developer' as developer;
 
 class MyAnnouncements extends ConsumerStatefulWidget {
   const MyAnnouncements({super.key});
@@ -31,34 +30,6 @@ class _MyAnnouncementsState extends ConsumerState<MyAnnouncements> {
     super.dispose();
   }
 
-  void _deleteAnnouncement(BuildContext context, announcement) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete Announcement'),
-          content: const Text(
-            'Are you sure you want to delete this announcement?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirmed == true) {
-      developer.log('Delete announcement: ${announcement.id}');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -66,7 +37,7 @@ class _MyAnnouncementsState extends ConsumerState<MyAnnouncements> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        text: 'Your Announcements',
+        text: 'Isk Announcements',
         centerTitle: true,
         backgroundColor: kPrimaryColor,
         titleColor: kWhiteColor,
@@ -138,9 +109,7 @@ class _MyAnnouncementsState extends ConsumerState<MyAnnouncements> {
                         motion: const ScrollMotion(),
                         children: [
                           CustomSlidableAction(
-                            onPressed:
-                                (context) =>
-                                    _deleteAnnouncement(context, announcement),
+                            onPressed: (context) => () {},
                             borderRadius: kBorderRadiusSmall,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -163,14 +132,9 @@ class _MyAnnouncementsState extends ConsumerState<MyAnnouncements> {
                         ],
                       ),
                       child: Container(
-                        padding: kPaddingCard,
                         decoration: BoxDecoration(
                           color: kWhiteColor,
-                          borderRadius: kBorderRadiusSmall,
-                          border: Border.all(
-                            width: 1,
-                            color: const Color(0xFFe2e8f0),
-                          ),
+                          borderRadius: kBorderRadiusMedium,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,37 +146,42 @@ class _MyAnnouncementsState extends ConsumerState<MyAnnouncements> {
                                     imagePath,
                                   ),
                               child: ClipRRect(
-                                borderRadius: kBorderRadiusSmall,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
                                 child: Image.asset(
-                                  width: 100,
+                                  width: 125,
                                   height: 100,
                                   imagePath,
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 8),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    announcement.title,
-                                    style: textTheme.titleMedium?.copyWith(
-                                      color: kPrimaryColor,
+                              child: Container(
+                                padding: kPaddingCard,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      announcement.title,
+                                      style: textTheme.titleMedium?.copyWith(
+                                        color: kPrimaryColor,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    formatTimestamp(announcement.timestamp),
-                                    style: textTheme.bodySmall,
-                                  ),
-                                  Text(
-                                    announcement.message,
-                                    style: textTheme.bodySmall,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                                    Text(
+                                      formatTimestamp(announcement.timestamp),
+                                      style: textTheme.bodySmall,
+                                    ),
+                                    Text(
+                                      announcement.message,
+                                      style: textTheme.bodySmall,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

@@ -40,8 +40,8 @@ class _SettingsState extends State<Settings> {
                     child: Column(
                       children: [
                         Container(
-                          width: 100,
-                          height: 100,
+                          width: 75,
+                          height: 75,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: const DecorationImage(
@@ -114,8 +114,6 @@ class _SettingsState extends State<Settings> {
                         ),
                       );
                     }),
-                    SizedBox(height: 8),
-                    buildSettingsOption(context, 'Privacy', () {}),
                   ],
                 ),
               ),

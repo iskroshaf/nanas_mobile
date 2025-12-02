@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nanas_mobile/screens/announcements.dart';
+import 'package:nanas_mobile/screens/chat.dart';
+import 'package:nanas_mobile/screens/farms.dart';
 import 'package:nanas_mobile/screens/home.dart';
 import 'package:nanas_mobile/screens/settings.dart';
 import 'package:nanas_mobile/styles/colors.dart';
@@ -45,7 +47,7 @@ class _EntDashboardState extends State<EntDashboard> {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [Announcements(), Home(), Settings()],
+        children: [Farms(), Announcements(), Home(), Chat(), Settings()],
       ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
@@ -73,18 +75,23 @@ class _EntDashboardState extends State<EntDashboard> {
               unselectedItemColor: unselectedColor,
               items: [
                 BottomNavigationBarItem(
-                  icon: FaIcon(
-                    FontAwesomeIcons.bullhorn,
-                    size: kIconSizeMedium,
-                  ),
-                  label: 'Annoucement',
+                  icon: FaIcon(FontAwesomeIcons.tractor, size: kIconSizeSmall),
+                  label: 'Farms',
                 ),
                 BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.tractor, size: kIconSizeMedium),
+                  icon: FaIcon(FontAwesomeIcons.bullhorn, size: kIconSizeSmall),
+                  label: 'Annoucements',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.home, size: kIconSizeSmall),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.gear, size: kIconSizeMedium),
+                  icon: FaIcon(FontAwesomeIcons.comment, size: kIconSizeSmall),
+                  label: 'Chat',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.gear, size: kIconSizeSmall),
                   label: 'Settings',
                 ),
               ],

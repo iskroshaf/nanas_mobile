@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 const double kFontSizeSmall = 10.0;
 const double kFontSizeMedium = 12.0;
 const double kFontSizeLarge = 14.0;
-const double kFontSizeXLarge = 16.0;
+const double kFontSizeExtraLarge = 16.0;
 
 const EdgeInsets kPaddingBody = EdgeInsets.only(left: 16, right: 16);
 

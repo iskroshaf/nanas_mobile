@@ -107,12 +107,7 @@ class ImagePickerHelper {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: kPrimaryColor,
-                  ),
-                ),
+                Text(title, style: theme.textTheme.titleMedium),
                 Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),

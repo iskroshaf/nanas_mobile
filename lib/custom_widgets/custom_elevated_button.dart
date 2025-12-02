@@ -8,6 +8,11 @@ import 'package:nanas_mobile/custom_widgets/custom_circular_progress_indicator.d
 class CustomElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
+
+  // New: Icon support
+  final IconData? icon;
+  final double iconSize;
+
   final EdgeInsets padding;
   final BorderRadius borderRadius;
   final Color backgroundColor;
@@ -22,6 +27,8 @@ class CustomElevatedButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
+    this.icon,
+    this.iconSize = kIconSizeSmall,
     this.padding = kPaddingButton,
     this.borderRadius = kBorderRadiusFull,
     this.backgroundColor = kPrimaryColor,
@@ -35,10 +42,12 @@ class CustomElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return IgnorePointer(
       ignoring: isDisable || isLoading,
       child: Opacity(
-        opacity: isDisable || isLoading ? 0.5 : 1,
+        opacity: isDisable || isLoading ? 0.5 : 1.0,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
@@ -48,23 +57,33 @@ class CustomElevatedButton extends StatelessWidget {
             elevation: elevation,
             shape: RoundedRectangleBorder(borderRadius: borderRadius),
             side: BorderSide(color: borderColor, width: borderWidth),
-            textStyle: const TextStyle(
-              fontFamily: 'myFont',
-              fontWeight: FontWeight.normal,
-              fontSize: kFontSizeMedium,
-            ),
           ),
           child:
               isLoading
                   ? SizedBox(
-                    height: 16,
-                    width: 16,
+                    height: 20,
+                    width: 20,
                     child: CustomCircularProgressIndicator(
                       color: foregroundColor,
-                      strokeWidth: 2.0,
+                      strokeWidth: 2.5,
                     ),
                   )
-                  : Text(text),
+                  : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (icon != null) ...[
+                        Icon(icon, size: iconSize, color: foregroundColor),
+                        const SizedBox(width: 8),
+                      ],
+                      Text(
+                        text,
+                        style: textTheme.titleMedium?.copyWith(
+                          color: foregroundColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
         ),
       ),
     );
