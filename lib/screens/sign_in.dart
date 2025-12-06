@@ -94,6 +94,9 @@ class _SignInState extends State<SignIn> {
           padding: kPaddingBody,
           child: Column(
             children: [
+              const SizedBox(height: 80),
+              Image.asset('assets/images/logo.png', height: 120),
+              const SizedBox(height: 40),
               CustomTextField(
                 isDisable: _isSignIn,
                 controller: _emailController,

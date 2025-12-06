@@ -102,6 +102,9 @@ class _SignUpState extends State<SignUp> {
           padding: kPaddingBody,
           child: Column(
             children: [
+              const SizedBox(height: 80),
+              Image.asset('assets/images/logo.png', height: 120),
+              const SizedBox(height: 40),
               CustomTextField(
                 isDisable: _isSignUp,
                 controller: _usernameController,
