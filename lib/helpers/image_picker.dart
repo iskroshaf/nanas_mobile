@@ -12,15 +12,14 @@ class ImagePickerHelper {
 
   static Future<File?> pickImage(BuildContext context) async {
     final textTheme = Theme.of(context).textTheme;
-    File? selectedFile;
 
-    await showModalBottomSheet(
+    final File? selectedFile = await showModalBottomSheet<File?>(
       context: context,
       isScrollControlled: true,
-      builder: (BuildContext context) {
+      builder: (BuildContext sheetContext) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Theme.of(sheetContext).scaffoldBackgroundColor,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           ),
           child: SafeArea(
@@ -37,36 +36,42 @@ class ImagePickerHelper {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text('Choose Image Source', style: textTheme.titleLarge),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
+
+                  // CAMERA
                   _buildOptionCard(
-                    context: context,
-                    theme: Theme.of(context),
+                    context: sheetContext,
+                    theme: Theme.of(sheetContext),
                     icon: FontAwesomeIcons.camera,
                     title: 'Camera',
                     subtitle: 'Take a new photo',
                     onTap: () async {
-                      Navigator.pop(context);
-                      selectedFile = await _pickImageFromSource(
+                      final file = await _pickImageFromSource(
                         ImageSource.camera,
-                        context,
+                        sheetContext,
                       );
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(sheetContext, file);
                     },
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
+
+                  // GALLERY
                   _buildOptionCard(
-                    context: context,
-                    theme: Theme.of(context),
+                    context: sheetContext,
+                    theme: Theme.of(sheetContext),
                     icon: FontAwesomeIcons.images,
                     title: 'Gallery',
                     subtitle: 'Choose from your photos',
                     onTap: () async {
-                      Navigator.pop(context);
-                      selectedFile = await _pickImageFromSource(
+                      final file = await _pickImageFromSource(
                         ImageSource.gallery,
-                        context,
+                        sheetContext,
                       );
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(sheetContext, file);
                     },
                   ),
                 ],
@@ -76,6 +81,8 @@ class ImagePickerHelper {
         );
       },
     );
+
+    // Di sini, selectedFile ialah nilai yang dihantar melalui Navigator.pop(ctx, file)
     return selectedFile;
   }
 

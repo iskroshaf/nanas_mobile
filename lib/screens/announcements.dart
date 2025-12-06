@@ -11,6 +11,7 @@ import 'package:nanas_mobile/screens/my_announcements.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'package:nanas_mobile/utils/date.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:developer' as developer;
 
 class Announcements extends ConsumerStatefulWidget {
@@ -24,9 +25,19 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    ref.invalidate(announcementProvider);
+    await ref.read(announcementProvider.future);
   }
 
   @override
@@ -39,6 +50,7 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
       body: SafeArea(
         child: Column(
           children: [
+            // HEADER
             Container(
               padding: kPaddingBody.copyWith(top: 16, bottom: 16),
               width: double.infinity,
@@ -62,15 +74,19 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   CustomIconButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      // Pergi ke MyAnnouncements
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MyAnnouncements(),
+                          builder: (context) => const MyAnnouncements(),
                         ),
                       );
+
+                      if (!mounted) return;
+                      ref.invalidate(announcementProvider);
                     },
                     icon: FontAwesomeIcons.bullhorn,
                     iconColor: kWhiteColor,
@@ -79,6 +95,7 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
                 ],
               ),
             ),
+
             Expanded(
               child: announcementsAsyncValue.when(
                 loading:
@@ -89,135 +106,225 @@ class _AnnouncementsState extends ConsumerState<Announcements> {
                       child: Text('$error', style: textTheme.bodyMedium),
                     ),
                 data: (announcements) {
-                  if (announcements.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'No Vendor found.',
-                        style: textTheme.bodyMedium,
-                      ),
-                    );
-                  }
-                  return Container(
-                    color: kBodyLightColor,
-                    padding: kPaddingBody.copyWith(right: 4),
-                    child: Scrollbar(
-                      controller: _scrollController,
-                      interactive: true,
-                      thumbVisibility: true,
-                      thickness: 6,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        primary: false,
-                        padding: const EdgeInsets.only(right: 12),
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
-                        itemCount: announcements.length,
-                        itemBuilder: (context, index) {
-                          final announcement = announcements[index];
-                          final imagePath =
-                              'assets/images/wp${(index % 4) + 1}.jpg';
-                          return GestureDetector(
-                            onTap: () {
-                              developer.log(announcement.title);
-                            },
-                            child: Column(
-                              children: [
-                                if (index == 0) const SizedBox(height: 10),
-                                Container(
-                                  padding: kPaddingCard,
-                                  height: 250,
-                                  decoration: BoxDecoration(
-                                    color: kWhiteColor,
-                                    borderRadius: kBorderRadiusSmall,
+                  return RefreshIndicator(
+                    onRefresh: _refresh,
+                    child:
+                        announcements.isEmpty
+                            ? Container(
+                              color: kBodyLightColor,
+                              child: ListView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                children: [
+                                  const SizedBox(height: 80),
+                                  Center(
+                                    child: Text(
+                                      'No announcements found.',
+                                      style: textTheme.bodyMedium,
+                                    ),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Row(
+                                ],
+                              ),
+                            )
+                            : Container(
+                              color: kBodyLightColor,
+                              padding: kPaddingBody.copyWith(right: 4),
+                              child: Scrollbar(
+                                controller: _scrollController,
+                                interactive: true,
+                                thumbVisibility: true,
+                                thickness: 6,
+                                child: ListView.separated(
+                                  controller: _scrollController,
+                                  primary: false,
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.only(right: 12),
+                                  separatorBuilder:
+                                      (_, __) => const SizedBox(height: 8),
+                                  itemCount: announcements.length,
+                                  itemBuilder: (context, index) {
+                                    final announcement = announcements[index];
+
+                                    final fallbackAsset =
+                                        'assets/images/wp${(index % 4) + 1}.jpg';
+
+                                    String? fullImgUrl;
+                                    if (announcement.imageUrl != null &&
+                                        announcement.imageUrl!
+                                            .toString()
+                                            .isNotEmpty) {
+                                      fullImgUrl =
+                                          "${dotenv.env['DOMAIN']}:${dotenv.env['PORT']}${announcement.imageUrl}";
+                                    }
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        developer.log(announcement.title);
+                                      },
+                                      child: Column(
                                         children: [
+                                          if (index == 0)
+                                            const SizedBox(height: 10),
                                           Container(
-                                            width: 20,
-                                            height: 20,
+                                            padding: kPaddingCard,
+                                            height: 250,
                                             decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: AssetImage(imagePath),
-                                                fit: BoxFit.cover,
-                                              ),
+                                              color: kWhiteColor,
+                                              borderRadius: kBorderRadiusSmall,
                                             ),
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            announcement.sender,
-                                            style: textTheme.bodyMedium,
-                                          ),
-                                          Spacer(),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                announcement.farm,
-                                                style: textTheme.titleSmall
-                                                    ?.copyWith(
-                                                      color: kPrimaryColor,
+                                            child: Column(
+                                              children: [
+                                                // Row atas: avatar + sender + farm + timestamp
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 20,
+                                                      height: 20,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                          image:
+                                                              fullImgUrl != null
+                                                                  ? NetworkImage(
+                                                                    fullImgUrl,
+                                                                  )
+                                                                  : AssetImage(
+                                                                        fallbackAsset,
+                                                                      )
+                                                                      as ImageProvider,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
                                                     ),
-                                              ),
-                                              Text(
-                                                formatTimestamp(
-                                                  announcement.timestamp,
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      announcement.sender,
+                                                      style:
+                                                          textTheme.bodyMedium,
+                                                    ),
+                                                    const Spacer(),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                          announcement.farm,
+                                                          style: textTheme
+                                                              .titleSmall
+                                                              ?.copyWith(
+                                                                color:
+                                                                    kPrimaryColor,
+                                                              ),
+                                                        ),
+                                                        Text(
+                                                          formatTimestamp(
+                                                            announcement
+                                                                .timestamp,
+                                                          ),
+                                                          style:
+                                                              textTheme
+                                                                  .bodySmall,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                                style: textTheme.bodySmall,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 4),
-                                      GestureDetector(
-                                        onTap:
-                                            () => ImageViewerHelper.viewImage(
-                                              context,
-                                              imagePath,
+
+                                                const SizedBox(height: 4),
+
+                                                // Gambar utama
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    if (fullImgUrl != null) {
+                                                      ImageViewerHelper.viewImage(
+                                                        context,
+                                                        fullImgUrl,
+                                                      );
+                                                    } else {
+                                                      ImageViewerHelper.viewImage(
+                                                        context,
+                                                        fallbackAsset,
+                                                      );
+                                                    }
+                                                  },
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        kBorderRadiusSmall,
+                                                    child:
+                                                        fullImgUrl != null
+                                                            ? Image.network(
+                                                              fullImgUrl,
+                                                              height: 125,
+                                                              width:
+                                                                  double
+                                                                      .infinity,
+                                                              fit: BoxFit.cover,
+                                                              errorBuilder:
+                                                                  (
+                                                                    _,
+                                                                    __,
+                                                                    ___,
+                                                                  ) => Image.asset(
+                                                                    fallbackAsset,
+                                                                    height: 125,
+                                                                    width:
+                                                                        double
+                                                                            .infinity,
+                                                                    fit:
+                                                                        BoxFit
+                                                                            .cover,
+                                                                  ),
+                                                            )
+                                                            : Image.asset(
+                                                              fallbackAsset,
+                                                              height: 125,
+                                                              width:
+                                                                  double
+                                                                      .infinity,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                  ),
+                                                ),
+
+                                                const SizedBox(height: 8),
+
+                                                // Title + message
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      announcement.title,
+                                                      style: textTheme
+                                                          .titleMedium
+                                                          ?.copyWith(
+                                                            color:
+                                                                kPrimaryColor,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      announcement.message,
+                                                      style:
+                                                          textTheme.bodySmall,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
-                                        child: ClipRRect(
-                                          borderRadius: kBorderRadiusSmall,
-                                          child: Image.asset(
-                                            height: 125,
-                                            width: double.infinity,
-                                            imagePath,
-                                            fit: BoxFit.cover,
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            announcement.title,
-                                            style: textTheme.titleMedium
-                                                ?.copyWith(
-                                                  color: kPrimaryColor,
-                                                ),
-                                          ),
-                                          Text(
-                                            announcement.message,
-                                            style: textTheme.bodySmall,
-                                            maxLines: 2,
-                                          ),
+                                          if (index == announcements.length - 1)
+                                            const SizedBox(height: 10),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 ),
-                                if (index == announcements.length - 1)
-                                  const SizedBox(height: 10),
-                              ],
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
                   );
                 },
               ),

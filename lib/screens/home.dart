@@ -6,11 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nanas_mobile/custom_widgets/custom_circular_progress_indicator.dart';
 import 'package:nanas_mobile/helpers/image_viewer.dart';
 import 'package:nanas_mobile/providers/announcement.dart';
-import 'package:nanas_mobile/providers/ven_shop.dart';
-import 'package:nanas_mobile/screens/ven_shop.dart' as screen;
+import 'package:nanas_mobile/providers/farm_provider.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
 import 'package:nanas_mobile/utils/date.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:developer' as developer;
 
 class Home extends ConsumerStatefulWidget {
@@ -24,9 +24,28 @@ class _HomeState extends ConsumerState<Home> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.invalidate(announcementProvider);
+      ref.invalidate(farmProvider);
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    ref.invalidate(announcementProvider);
+    ref.invalidate(farmProvider);
+
+    await Future.wait([
+      ref.read(announcementProvider.future),
+      ref.read(farmProvider.future),
+    ]);
   }
 
   @override
@@ -34,7 +53,7 @@ class _HomeState extends ConsumerState<Home> {
     final textTheme = Theme.of(context).textTheme;
 
     final announcementsAsync = ref.watch(announcementProvider);
-    final shopsAsync = ref.watch(venShopProvider);
+    final farmsAsync = ref.watch(farmProvider);
 
     return Scaffold(
       backgroundColor: kPrimaryColor,
@@ -64,11 +83,11 @@ class _HomeState extends ConsumerState<Home> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Container(
                     width: 25,
                     height: 25,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         image: AssetImage('assets/images/meWithBajuMelayu.jpg'),
@@ -79,6 +98,7 @@ class _HomeState extends ConsumerState<Home> {
                 ],
               ),
             ),
+
             Expanded(
               child: Container(
                 color: kBodyLightColor,
@@ -92,7 +112,7 @@ class _HomeState extends ConsumerState<Home> {
                         child: Text('Error: $err', style: textTheme.bodyMedium),
                       ),
                   data:
-                      (announcements) => shopsAsync.when(
+                      (announcements) => farmsAsync.when(
                         loading:
                             () => const Center(
                               child: CustomCircularProgressIndicator(),
@@ -105,227 +125,106 @@ class _HomeState extends ConsumerState<Home> {
                               ),
                             ),
                         data:
-                            (shops) => SingleChildScrollView(
-                              padding: const EdgeInsets.only(
-                                top: 16,
-                                bottom: 16,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: kPaddingBody,
-                                    child: Row(
-                                      children: [
-                                        _buildStatCard(
-                                          'Total Farms',
-                                          shops.length,
-                                          FontAwesomeIcons.tractor,
-                                        ),
-                                        const SizedBox(width: 12),
-                                        _buildStatCard(
-                                          'Announcements',
-                                          announcements.length,
-                                          FontAwesomeIcons.bullhorn,
-                                        ),
-                                        const SizedBox(width: 12),
-                                        _buildStatCard(
-                                          'Active Vendors',
-                                          shops.length,
-                                          FontAwesomeIcons.store,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Padding(
-                                    padding: kPaddingBody.copyWith(bottom: 4),
-                                    child: Text(
-                                      'Recent Announcements',
-                                      style: textTheme.titleLarge,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 200,
-                                    child: ListView.builder(
-                                      padding: kPaddingBody.copyWith(right: 4),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          announcements.length > 5
-                                              ? 5
-                                              : announcements.length,
-                                      itemBuilder: (context, index) {
-                                        final ann = announcements[index];
-                                        final imagePath =
-                                            'assets/images/wp${(index % 4) + 1}.jpg';
-                                        return Container(
-                                          width: 275,
-                                          margin: const EdgeInsets.only(
-                                            right: 12,
+                            (farms) => RefreshIndicator(
+                              onRefresh: _refresh,
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.only(
+                                  top: 16,
+                                  bottom: 16,
+                                ),
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 📊 STAT CARDS
+                                    Padding(
+                                      padding: kPaddingBody,
+                                      child: Row(
+                                        children: [
+                                          _buildStatCard(
+                                            'Total Farms',
+                                            farms.length,
+                                            FontAwesomeIcons.tractor,
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: kWhiteColor,
-                                            borderRadius: kBorderRadiusSmall,
+                                          const SizedBox(width: 12),
+                                          _buildStatCard(
+                                            'Announcements',
+                                            announcements.length,
+                                            FontAwesomeIcons.bullhorn,
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              GestureDetector(
-                                                onTap:
-                                                    () =>
-                                                        ImageViewerHelper.viewImage(
-                                                          context,
-                                                          imagePath,
-                                                        ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.vertical(
-                                                        top: Radius.circular(
-                                                          12,
-                                                        ),
-                                                      ),
-                                                  child: Image.asset(
-                                                    imagePath,
-                                                    height: 100,
-                                                    width: double.infinity,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: kPaddingCard,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      ann.title,
-                                                      style: textTheme
-                                                          .titleMedium
-                                                          ?.copyWith(
-                                                            color:
-                                                                kPrimaryColor,
-                                                          ),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Text(
-                                                      ann.message,
-                                                      style:
-                                                          textTheme.bodySmall,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    Row(
-                                                      children: [
-                                                        Container(
-                                                          width: 20,
-                                                          height: 20,
-                                                          decoration: BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            image: DecorationImage(
-                                                              image: AssetImage(
-                                                                imagePath,
-                                                              ),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 4),
-                                                        Text(
-                                                          ann.sender,
-                                                          style: textTheme
-                                                              .bodySmall
-                                                              ?.copyWith(
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                        ),
-                                                        Spacer(),
-                                                        Text(
-                                                          formatTimestamp(
-                                                            ann.timestamp,
-                                                          ),
-                                                          style:
-                                                              textTheme
-                                                                  .bodySmall,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                          const SizedBox(width: 12),
+                                          _buildStatCard(
+                                            'Active Vendors',
+                                            farms.length,
+                                            FontAwesomeIcons.store,
                                           ),
-                                        );
-                                      },
+                                        ],
+                                      ),
                                     ),
-                                  ),
 
-                                  const SizedBox(height: 24),
-                                  Padding(
-                                    padding: kPaddingBody.copyWith(bottom: 4),
-                                    child: Text(
-                                      'Featured Farms',
-                                      style: textTheme.titleLarge,
+                                    const SizedBox(height: 24),
+
+                                    // 🔔 RECENT ANNOUNCEMENTS
+                                    Padding(
+                                      padding: kPaddingBody.copyWith(bottom: 4),
+                                      child: Text(
+                                        'Recent Announcements',
+                                        style: textTheme.titleLarge,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 225,
-                                    child: ListView.builder(
-                                      padding: kPaddingBody.copyWith(right: 4),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          shops.length > 8 ? 8 : shops.length,
-                                      itemBuilder: (context, index) {
-                                        final shop = shops[index];
-                                        final img =
-                                            'assets/images/wp${(index % 4) + 1}.jpg';
-                                        return Container(
-                                          width: 280,
-                                          margin: const EdgeInsets.only(
-                                            right: 12,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: kWhiteColor,
-                                            borderRadius: kBorderRadiusSmall,
-                                          ),
-                                          child: InkWell(
-                                            borderRadius: kBorderRadiusSmall,
-                                            onTap: () {
-                                              developer.log(shop.name);
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (_) => screen.VenShop(
-                                                        shop: shop,
-                                                      ),
-                                                ),
-                                              );
-                                            },
+                                    SizedBox(
+                                      height: 200,
+                                      child: ListView.builder(
+                                        padding: kPaddingBody.copyWith(
+                                          right: 4,
+                                        ),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            announcements.length > 5
+                                                ? 5
+                                                : announcements.length,
+                                        itemBuilder: (context, index) {
+                                          final ann = announcements[index];
+                                          final imagePath =
+                                              (ann.imageUrl != null &&
+                                                      ann.imageUrl!.isNotEmpty)
+                                                  ? "${dotenv.env['DOMAIN']}:${dotenv.env['PORT']}${ann.imageUrl}"
+                                                  : 'assets/images/farm_placeholder.jpg';
+                                          // final imagePath =
+                                          //     'assets/images/wp${(index % 4) + 1}.jpg';
+                                          return Container(
+                                            width: 275,
+                                            margin: const EdgeInsets.only(
+                                              right: 12,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: kWhiteColor,
+                                              borderRadius: kBorderRadiusSmall,
+                                            ),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.vertical(
-                                                        top: Radius.circular(
-                                                          12,
+                                                GestureDetector(
+                                                  onTap:
+                                                      () =>
+                                                          ImageViewerHelper.viewImage(
+                                                            context,
+                                                            imagePath,
+                                                          ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.vertical(
+                                                          top: Radius.circular(
+                                                            12,
+                                                          ),
                                                         ),
-                                                      ),
-                                                  child: Image.asset(
-                                                    img,
-                                                    height: 120,
-                                                    width: double.infinity,
-                                                    fit: BoxFit.cover,
+                                                    child: Image.network(
+                                                      imagePath,
+                                                      height: 100,
+                                                      width: double.infinity,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
                                                 Padding(
@@ -336,66 +235,226 @@ class _HomeState extends ConsumerState<Home> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        shop.name,
-                                                        style:
-                                                            textTheme
-                                                                .titleMedium,
+                                                        ann.title,
+                                                        style: textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                              color:
+                                                                  kPrimaryColor,
+                                                            ),
                                                         maxLines: 1,
                                                         overflow:
                                                             TextOverflow
                                                                 .ellipsis,
                                                       ),
-                                                      const SizedBox(height: 2),
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        ann.message,
+                                                        style:
+                                                            textTheme.bodySmall,
+                                                        maxLines: 2,
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                      ),
+                                                      const SizedBox(height: 8),
                                                       Row(
                                                         children: [
+                                                          Container(
+                                                            width: 20,
+                                                            height: 20,
+                                                            decoration: BoxDecoration(
+                                                              shape:
+                                                                  BoxShape
+                                                                      .circle,
+                                                              image: DecorationImage(
+                                                                image:
+                                                                    AssetImage(
+                                                                      imagePath,
+                                                                    ),
+                                                                fit:
+                                                                    BoxFit
+                                                                        .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 4,
+                                                          ),
                                                           Text(
-                                                            'RM${shop.price.toStringAsFixed(2)}/kg',
+                                                            ann.sender,
                                                             style: textTheme
-                                                                .titleSmall
+                                                                .bodySmall
                                                                 ?.copyWith(
                                                                   color:
-                                                                      kPrimaryColor,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                      Colors
+                                                                          .grey,
                                                                 ),
                                                           ),
-                                                          SizedBox(width: 4),
+                                                          const Spacer(),
                                                           Text(
-                                                            shop.location,
+                                                            formatTimestamp(
+                                                              ann.timestamp,
+                                                            ),
                                                             style:
                                                                 textTheme
                                                                     .bodySmall,
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(height: 2),
-                                                      Text(
-                                                        shop.desc,
-                                                        style: textTheme
-                                                            .bodySmall
-                                                            ?.copyWith(
-                                                              color:
-                                                                  Colors
-                                                                      .grey[600],
-                                                            ),
-                                                        maxLines: 2,
-                                                        overflow:
-                                                            TextOverflow
-                                                                .ellipsis,
-                                                      ),
                                                     ],
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                ],
+
+                                    const SizedBox(height: 24),
+
+                                    Padding(
+                                      padding: kPaddingBody.copyWith(bottom: 4),
+                                      child: Text(
+                                        'Featured Farms',
+                                        style: textTheme.titleLarge,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 225,
+                                      child: ListView.builder(
+                                        padding: kPaddingBody.copyWith(
+                                          right: 4,
+                                        ),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            farms.length > 8 ? 8 : farms.length,
+                                        itemBuilder: (context, index) {
+                                          final farm = farms[index];
+                                          final img =
+                                              (farm.imageUrl != null &&
+                                                      farm.imageUrl!.isNotEmpty)
+                                                  ? "${dotenv.env['DOMAIN']}:${dotenv.env['PORT']}${farm.imageUrl}"
+                                                  : 'assets/images/farm_placeholder.jpg';
+
+                                          return Container(
+                                            width: 280,
+                                            margin: const EdgeInsets.only(
+                                              right: 12,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: kWhiteColor,
+                                              borderRadius: kBorderRadiusSmall,
+                                            ),
+                                            child: InkWell(
+                                              borderRadius: kBorderRadiusSmall,
+                                              onTap: () {
+                                                developer.log(farm.name);
+                                              },
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.vertical(
+                                                          top: Radius.circular(
+                                                            12,
+                                                          ),
+                                                        ),
+                                                    child:
+                                                        img.startsWith(
+                                                              'assets/',
+                                                            )
+                                                            ? Image.asset(
+                                                              img,
+                                                              height: 120,
+                                                              width:
+                                                                  double
+                                                                      .infinity,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                            : Image.network(
+                                                              img,
+                                                              height: 120,
+                                                              width:
+                                                                  double
+                                                                      .infinity,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                  ),
+                                                  Padding(
+                                                    padding: kPaddingCard,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          farm.name,
+                                                          style:
+                                                              textTheme
+                                                                  .titleMedium,
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2,
+                                                        ),
+                                                        Text(
+                                                          'Variety: ${farm.pineappleVariety}',
+                                                          style: textTheme
+                                                              .titleSmall
+                                                              ?.copyWith(
+                                                                color:
+                                                                    kPrimaryColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2,
+                                                        ),
+                                                        Text(
+                                                          'Size: ${farm.size}',
+                                                          style:
+                                                              textTheme
+                                                                  .bodySmall,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 2,
+                                                        ),
+                                                        Text(
+                                                          '${farm.address}, ${farm.city} ${farm.postcode}',
+                                                          style: textTheme
+                                                              .bodySmall
+                                                              ?.copyWith(
+                                                                color:
+                                                                    Colors
+                                                                        .grey[600],
+                                                              ),
+                                                          maxLines: 2,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 32),
+                                  ],
+                                ),
                               ),
                             ),
                       ),

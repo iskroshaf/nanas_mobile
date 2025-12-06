@@ -19,7 +19,7 @@ class ImageViewerHelper {
             children: [
               ClipRRect(
                 borderRadius: kBorderRadiusMedium,
-                child: Image.asset(imagePath, fit: BoxFit.contain),
+                child: Image.network(imagePath, fit: BoxFit.contain),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

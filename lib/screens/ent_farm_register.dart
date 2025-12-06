@@ -1,4 +1,4 @@
-// lib/screens/farm_register.dart
+// lib/screens/ent_farm_register.dart
 
 import 'dart:io';
 
@@ -8,10 +8,11 @@ import 'package:nanas_mobile/custom_widgets/custom_outlined_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_elevated_button.dart';
 import 'package:nanas_mobile/custom_widgets/custom_text_field.dart';
 import 'package:nanas_mobile/helpers/image_picker.dart';
-import 'package:nanas_mobile/screens/ent_dashboard.dart';
+import 'package:nanas_mobile/services/ent.dart';
 import 'package:nanas_mobile/styles/colors.dart';
 import 'package:nanas_mobile/styles/sizes.dart';
-// import 'dart:developer' as developer;
+import 'package:nanas_mobile/custom_widgets/custom_snack_bar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EntFarmRegister extends StatefulWidget {
   const EntFarmRegister({super.key});
@@ -37,10 +38,87 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
   final _ownerPhoneCtrl = TextEditingController();
   final _ownerIcCtrl = TextEditingController();
   File? _ownerImage;
+  String? _profilePhotoUrl;
+
+  Future<void> _loadOwnerData() async {
+    try {
+      final p = await EntService.getOwnerProfile();
+
+      _ownerNameCtrl.text = p["full_name"] ?? "";
+      _ownerPhoneCtrl.text = p["phone_no"] ?? "";
+      _ownerIcCtrl.text = p["ic"] ?? "";
+
+      if (p["profile_photo"] != null) {
+        _profilePhotoUrl =
+            "${dotenv.env['DOMAIN']}:${dotenv.env['PORT']}${p['profile_photo']}";
+      }
+
+
+      setState(() {});
+    } catch (_) {}
+  }
+
+  Future<void> _submitOwnerInfo() async {
+    try {
+      await EntService.updateOwnerProfile(
+        fullName: _ownerNameCtrl.text,
+        phoneNo: _ownerPhoneCtrl.text,
+        ic: _ownerIcCtrl.text,
+        profilePhoto: _ownerImage,
+      );
+
+      CustomSnackBar.show(
+        // ignore: use_build_context_synchronously
+        context: context,
+        message: 'Owner Update Successfully',
+        type: SnackBarType.success,
+      );
+    } catch (e) {
+      CustomSnackBar.show(
+        // ignore: use_build_context_synchronously
+        context: context,
+        message: 'Failed to update owner',
+        type: SnackBarType.error,
+      );
+    }
+  }
+
+  Future<void> _submitFarm() async {
+    try {
+      await EntService.registerFarm(
+        name: _farmNameCtrl.text,
+        size: _farmSizeCtrl.text,
+        address: _addressCtrl.text,
+        postcode: _postcodeCtrl.text,
+        city: _townCtrl.text,
+        pineappleVariety: _varietyCtrl.text,
+        image: _farmImage,
+      );
+
+      CustomSnackBar.show(
+        // ignore: use_build_context_synchronously
+        context: context,
+        message: 'Farm Added Successfully',
+        type: SnackBarType.success,
+      );
+
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context, true);
+    } catch (e) {
+      CustomSnackBar.show(
+        // ignore: use_build_context_synchronously
+        context: context,
+        message: 'Failed to register farm',
+        type: SnackBarType.error,
+      );
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _loadOwnerData();
+
     _pageController = PageController();
   }
 
@@ -135,6 +213,13 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                           _ownerImage!,
                                           fit: BoxFit.cover,
                                         )
+                                        : _profilePhotoUrl != null
+                                        ? Image.network(
+                                          _profilePhotoUrl!,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (_, __, ___) => Icon(Icons.error),
+                                        )
                                         : Center(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -144,11 +229,8 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                                                 size: kIconSizeLarge,
                                                 color: Colors.grey.shade400,
                                               ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                'Tap to upload image',
-                                                style: textTheme.bodySmall,
-                                              ),
+                                              SizedBox(height: 8),
+                                              Text("Tap to upload image"),
                                             ],
                                           ),
                                         ),
@@ -338,18 +420,20 @@ class _EntFarmRegisterState extends State<EntFarmRegister> {
                     flex: 2,
                     child: CustomElevatedButton(
                       text: _currentPage == 0 ? 'Next' : 'Register',
-                      onPressed: () {
-                        _currentPage == 1
-                            ? Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EntDashboard(),
-                              ),
-                            )
-                            : _pageController.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
+                      onPressed: () async {
+                        if (_currentPage == 0) {
+                          // SUBMIT OWNER PROFILE
+                          await _submitOwnerInfo();
+
+                          // GO TO PAGE 2
+                          _pageController.nextPage(
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.easeInOut,
+                          );
+                        } else {
+                          // SUBMIT FARM REGISTRATION
+                          await _submitFarm();
+                        }
                       },
                     ),
                   ),
